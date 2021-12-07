@@ -1,0 +1,21 @@
+{
+	"name": "public-smart-contracts",
+	"version": "1.0.0",
+	"description": "",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:uzmigames/public-smart-contracts.git"
+	},
+	"author": "Andre Ferreira <andre@tos.world>",
+	"devDependencies": {
+		"@nomiclabs/hardhat-ethers": "^2.0.2",
+		"@nomiclabs/hardhat-etherscan": "^2.1.7",
+		"ethers": "^5.0.0",
+		"hardhat": "^2.6.8"
+	},
+	"dependencies": {
+		"@openzeppelin/contracts": "^4.3.3",
+		"dotenv": "^10.0.0"
+	}
+}
