@@ -1,21 +1,24 @@
-# Uzmi Public Smart Contracts
+Compile
+```
+yarn compile
+```
 
 Deploy
 ```
-npx hardhat run scripts/1_deploy.js
+yarn deploy
 ```
 
-Create More
+Typechain
 ```
-npx hardhat run scripts/2_mint.js
+yarn typechain
 ```
 
 Deploy Mainnet
 ```
-npx hardhat run scripts/1_deploy.js --network mainnet
+yarn deploy:network mainnet
 ```
 
 Ethersan Deploy
 ```
-npx hardhat verify --network mainnet <CONTRACT ADDRESS>
+yarn verify
 ```

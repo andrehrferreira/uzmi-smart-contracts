@@ -38,6 +38,7 @@ bower_components
 build/Release
 
 # Dependency directories
+node_modules
 node_modules/
 jspm_packages/
 
@@ -94,3 +95,10 @@ sw.*
 
 # Samples
 Samples
+
+cache
+artifacts
+typechain
+typechain-types
+coverage
+coverage.json
