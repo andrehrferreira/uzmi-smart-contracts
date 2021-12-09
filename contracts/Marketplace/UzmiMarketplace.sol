@@ -16,7 +16,7 @@ contract UzmiMarketplace {
     address public treasuryWallet;
     address public teamWallet;
     address public lotteryWallet;
-    uint256 public teamFee = 5;
+    uint256 public teamFee = 3;
     uint256 public lotteryFee = 1;
 
     struct Trade {

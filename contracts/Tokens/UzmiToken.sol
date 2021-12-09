@@ -28,9 +28,8 @@ contract UzmiToken is ERC20, Ownable {
     }
 
     function afterPreSale() external onlyOwner {
-        setTeamFee(5);
+        setTeamFee(3);
         setLotteryFee(1);
-
         tradingIsEnabled = true;
     }
 

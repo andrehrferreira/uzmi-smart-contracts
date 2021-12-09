@@ -1,24 +1,19 @@
-Compile
-```
-yarn compile
-```
-
 Deploy
 ```
-yarn deploy
+npx hardhat run scripts/1_deploy.js
 ```
 
-Typechain
+Create More
 ```
-yarn typechain
+npx hardhat run scripts/2_mint.js
 ```
 
 Deploy Mainnet
 ```
-yarn deploy:network mainnet
+npx hardhat run scripts/1_deploy.js --network mainnet
 ```
 
 Ethersan Deploy
 ```
-yarn verify
+npx hardhat verify --network mainnet 0x16B3839721E0aaBAA51294D4a6a2786aEfe8d5cF
 ```

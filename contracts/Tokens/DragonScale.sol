@@ -54,9 +54,9 @@ contract DragonScale is ERC20, ERC20Burnable, Pausable, AccessControl {
     }
 
     function afterPreSale() public onlyRole(DEFAULT_ADMIN_ROLE){
-        setTeamFee(5);
+        setTeamFee(3);
         setLotteryFee(1);
-        setBurnFee(1);
+        setBurnFee(3);
         tradingIsEnabled = true;
     }
 

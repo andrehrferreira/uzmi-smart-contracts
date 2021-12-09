@@ -29,10 +29,7 @@ contract UzmiNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
     uint256 public lotteryFee = 0;
 
     address public uzmiTokenAddress;
-    address public dragonScaleAddress;
-
     uint256 public uzmiTokenFee = 1;
-    uint256 public dragonScaleFee = 100;
 
     mapping (uint256 => uint256) public tokenIdToPrice;
     mapping (address => bool) public isExcludedFromFees;
@@ -84,16 +81,8 @@ contract UzmiNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
         uzmiTokenAddress = _tokenAddress;
     }
 
-    function setDragonScaleAddress(address _tokenAddress) public onlyRole(DEFAULT_ADMIN_ROLE){
-        dragonScaleAddress = _tokenAddress;
-    }
-
     function setUzmiTokenFee(uint256 newFee) public onlyRole(DEFAULT_ADMIN_ROLE){
         uzmiTokenFee = newFee;
-    }
-
-    function setDragonScaleFee(uint256 newFee) public onlyRole(DEFAULT_ADMIN_ROLE){
-        dragonScaleFee = newFee;
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {
@@ -213,25 +202,6 @@ contract UzmiNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
-    }
-
-    function Concatenate(string memory a, string memory b) public pure returns (string memory concatenatedString) {
-        bytes memory bytesA = bytes(a);
-        bytes memory bytesB = bytes(b);
-        string memory concatenatedAB = new string(bytesA.length + bytesB.length);
-        bytes memory bytesAB = bytes(concatenatedAB);
-        uint concatendatedIndex = 0;
-        uint index = 0;
-
-        for (index = 0; index < bytesA.length; index++) {
-            bytesAB[concatendatedIndex++] = bytesA[index];
-        }
-
-        for (index = 0; index < bytesB.length; index++) {
-            bytesAB[concatendatedIndex++] = bytesB[index];
-        }
-        
-        return string(bytesAB);
     }
 
     event ExcludeFromFees(address indexed account, bool isExcluded);

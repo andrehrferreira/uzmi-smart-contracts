@@ -4,6 +4,8 @@ const TeamWallet = "0x2B520f1395fd8EAF85C67C87A949997812A1B6B9";
 const LotteryWallet = "0x21A590F1055AF8780AfcD62ABe9DB0dAce5104a8";
 const TreasuryWallet = "0x35bF3e711A2413A85Bab840E1E38088bd4Cc1Cc9";
 
+import { UzmiMarketplace__factory } from "../typechain";
+
 async function main() {
     const [deployer] = await ethers.getSigners();
 
@@ -42,16 +44,27 @@ async function main() {
         await contractUzmiNft.setLotteryWallet(LotteryWallet);
         await contractUzmiNft.setTreasuryWallet(TreasuryWallet);
         await contractUzmiNft.setUzmiTokenAddress(uzmiToken.address);
-        await contractUzmiNft.setDragonScaleAddress(dragonScale.address);
 
         console.log(
             "Contract Uzmi NFTs deployed to address:",
             uzmiNft.address
         );
 
+        //Lottery
+        const sevenDays = Date.now() + ( 60 * 60 * 24 * 7 );
+        const nextDraw = Math.floor(sevenDays / 1000);
+        const UzmiLottery = await ethers.getContractFactory("UzmiLottery");
+        const uzmiLottery = await UzmiLottery.deploy(contractUzmiToken.address, LotteryWallet, nextDraw);
+        const contractUzmiLottery = await uzmiLottery.deployed();
+
+        console.log(
+            "Contract Uzmi Lottery deployed to address:",
+            contractUzmiLottery.address
+        );
+
         //Marketplace
-        const UzmiMarketplace = await ethers.getContractFactory("UzmiMarketplace");
-        const uzmiMarketplace = await UzmiNft.deploy(
+        const UzmiMarketplace: UzmiMarketplace__factory = await ethers.getContractFactory("UzmiMarketplace");
+        const uzmiMarketplace = await UzmiMarketplace.deploy(
             uzmiToken.address,
             uzmiNft.address,
             TreasuryWallet,
@@ -63,7 +76,7 @@ async function main() {
 
         console.log(
             "Contract Uzmi Marketplace deployed to address:",
-            uzmiMarketplace.address
+            contractUzmiMarketplace.address
         );
     } catch (e) {
         console.log(e);

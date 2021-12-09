@@ -1167,6 +1167,11 @@
   resolved "https://registry.yarnpkg.com/@solidity-parser/parser/-/parser-0.5.2.tgz#4d74670ead39e4f4fdab605a393ba8ea2390a2c4"
   integrity sha512-uRyvnvVYmgNmTBpWDbBsH/0kPESQhQpEc4KsvMRLVzFJ1o1s0uIv0Y6Y9IB5vI1Dwz2CbS4X/y4Wyw/75cTFnQ==
 
+"@symblox/hardhat-abi-gen@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@symblox/hardhat-abi-gen/-/hardhat-abi-gen-0.2.0.tgz#69ef506e548f834118b5996eddf2889c1fbe3d51"
+  integrity sha512-M1+/hxiaLLUSMCf9pPBhzZdWlS1NcxpbwdQjDTYu6taN1nRNBhtUi+sC4iHBwUU112ewXgmAVxYm3LG7PdADhQ==
+
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-1.1.2.tgz#b1665e2c461a2cd92f4c1bbf50d5454de0d4b421"
