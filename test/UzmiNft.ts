@@ -41,12 +41,6 @@ describe("Uzmi Nft", function () {
         contractUzmiNft = await UzmiNftFactory.deploy();
         contractUzmiNft = await contractUzmiNft.deployed();
 
-        await contractUzmiNft.afterPreSale();
-        await contractUzmiNft.setTeamWallet(address1.address);
-        await contractUzmiNft.setLotteryWallet(address2.address);
-        await contractUzmiNft.setTreasuryWallet(TreasuryWallet);
-        await contractUzmiNft.setUzmiTokenAddress(contractUzmiToken.address);
-
         //Marketplace
         const marketplaceFactory = await ethers.getContractFactory("UzmiMarketplace");
 
@@ -78,10 +72,8 @@ describe("Uzmi Nft", function () {
         }      
         
         //Open trande
-        const nfts = await contractUzmiNft.tokensOfOwner(owner.address);
-        await contractUzmiNft.approve(marketplace.address, nfts[0], { from: owner.address });
-        
-        let tx1 = await (await marketplace.openTrade(nfts[0], oneEth, { from: owner.address })).wait();
+        await contractUzmiNft.approve(marketplace.address, 0, { from: owner.address });
+        let tx1 = await (await marketplace.openTrade(0, oneEth, { from: owner.address })).wait();
         const transId = tx1.events?.filter((event) => event.event == "TradeStatusChange")[0].args;
 
         //Execute
@@ -89,12 +81,12 @@ describe("Uzmi Nft", function () {
         await (await marketplace.connect(address1).executeTrade(transId?.ad, { from: address1.address })).wait();
         const trade = await marketplace.getTrade(transId?.ad);
 
-        const nftsAccount1 = await contractUzmiNft.tokensOfOwner(address1.address);
+        /*const nftsAccount1 = await contractUzmiNft.tokensOfOwner(address1.address);
         
         for(let key in nftsAccount1){
             let nftMetadata = await contractUzmiNft.tokenURI(nftsAccount1[key]);
             expect(nftURI).to.equal(nftMetadata);
-        }
+        }*/
     });
 });
 

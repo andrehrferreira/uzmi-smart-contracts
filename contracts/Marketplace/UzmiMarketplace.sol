@@ -2,12 +2,16 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract UzmiMarketplace {
     using SafeMath for uint256;
+    using Counters for Counters.Counter;
+    
+    Counters.Counter private _itemsSold;
 
     IERC20 currencyToken;
     IERC721 itemToken;
@@ -27,7 +31,8 @@ contract UzmiMarketplace {
     }
 
     mapping(uint256 => Trade) public trades;
-    uint256 tradeCounter;
+    mapping(uint256 => uint256) public tradesByTokenId;
+    uint256 public tradeCounter;
 
     constructor (
         address _currencyTokenAddress, 
@@ -52,22 +57,33 @@ contract UzmiMarketplace {
         return (trade.poster, trade.item, trade.price, trade.status);
     }
 
-    function openTrade(uint256 _item, uint256 _price) public virtual {
+    function getTrageByTokenId(uint256 _item) public virtual view returns(uint256, address, uint256, uint256, bytes32){
+        uint256 _trade = tradesByTokenId[_item];
+        require(_trade > 0, "This item is not for sale");
+
+        Trade memory trade = trades[_trade];
+        return (_trade, trade.poster, trade.item, trade.price, trade.status);
+    }
+
+    function openTrade(uint256 _item, uint256 _price) public payable {
+        require(_price > 0, "Price must be at least 1 wei");
+
         itemToken.transferFrom(msg.sender, address(this), _item);
 
         trades[tradeCounter] = Trade({
-            poster: msg.sender,
+            poster: payable(msg.sender),
             item: _item,
             price: _price,
             status: "Open"
         });
 
+        tradesByTokenId[_item] = tradeCounter;
         tradeCounter += 1;
 
         emit TradeStatusChange(tradeCounter - 1, "Open");
     }
 
-    function executeTrade(uint256 _trade) public virtual {
+    function executeTrade(uint256 _trade) public payable {
         Trade memory trade = trades[_trade];
         require(trade.status == "Open", "Trade is not Open.");
 
@@ -89,12 +105,14 @@ contract UzmiMarketplace {
         currencyToken.transferFrom(msg.sender, trade.poster, taxedAmount);
 
         itemToken.transferFrom(address(this), msg.sender, trade.item);
+        _itemsSold.increment();
         trades[_trade].status = "Executed";
+        tradesByTokenId[trade.item] = 0;
 
         emit TradeStatusChange(_trade, "Executed");
     }
 
-    function cancelTrade(uint256 _trade) public virtual {
+    function cancelTrade(uint256 _trade) public payable {
         Trade memory trade = trades[_trade];
 
         require(
@@ -105,9 +123,28 @@ contract UzmiMarketplace {
         require(trade.status == "Open", "Trade is not Open.");
 
         itemToken.transferFrom(address(this), trade.poster, trade.item);
+        _itemsSold.increment();
         trades[_trade].status = "Cancelled";
+        tradesByTokenId[trade.item] = 0;
 
         emit TradeStatusChange(_trade, "Cancelled");
+    }
+
+    function fetchMarketItems() public view returns (Trade[] memory) {
+        uint256 itemsCount = tradeCounter - _itemsSold.current();
+        uint256 currentIndex = 0;
+
+        Trade[] memory items = new Trade[](itemsCount);
+
+        for (uint256 i = 0; i < tradeCounter; i++) {
+            if(trades[i].status == "Open"){
+                Trade storage currentItem = trades[i];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+
+        return items;
     }
 
     event TradeStatusChange(uint256 ad, bytes32 status);

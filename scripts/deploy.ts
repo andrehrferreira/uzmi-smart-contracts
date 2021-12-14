@@ -40,11 +40,6 @@ async function main() {
         const uzmiNft = await UzmiNft.deploy();
         const contractUzmiNft = await uzmiNft.deployed();
 
-        await contractUzmiNft.setTeamWallet(TeamWallet);
-        await contractUzmiNft.setLotteryWallet(LotteryWallet);
-        await contractUzmiNft.setTreasuryWallet(TreasuryWallet);
-        await contractUzmiNft.setUzmiTokenAddress(uzmiToken.address);
-
         console.log(
             "Contract Uzmi NFTs deployed to address:",
             uzmiNft.address
