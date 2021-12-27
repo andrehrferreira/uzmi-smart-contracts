@@ -103,8 +103,8 @@ contract UzmiMarketplace {
         }
 
         currencyToken.transferFrom(msg.sender, trade.poster, taxedAmount);
-
         itemToken.transferFrom(address(this), msg.sender, trade.item);
+        
         _itemsSold.increment();
         trades[_trade].status = "Executed";
         tradesByTokenId[trade.item] = 0;

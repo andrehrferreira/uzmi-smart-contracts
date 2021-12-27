@@ -112,13 +112,13 @@ contract DragonScale is ERC20, ERC20Burnable, Pausable, AccessControl {
         else {
             uint256 taxedAmount = amount;
 
-            if (teamFee > 0) {
+            if (teamFee > 0 && teamWallet != address(0)) {
                 uint256 tokensToTeam = amount.mul(teamFee).div(100);
                 taxedAmount = taxedAmount.sub(tokensToTeam);
                 super._transfer(from, teamWallet, tokensToTeam);
             }
 
-            if (lotteryFee > 0) {
+            if (lotteryFee > 0 && lotteryWallet != address(0)) {
                 uint256 tokensToLottery = amount.mul(lotteryFee).div(100);
                 taxedAmount = taxedAmount.sub(tokensToLottery);
                 super._transfer(from, lotteryWallet, tokensToLottery);
